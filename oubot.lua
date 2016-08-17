@@ -78,13 +78,13 @@ function oubot:action(msg, config)
                 utilities.build_name(msg.from.first_name, msg.from.last_name),
                 msg.from.id
             )
-            utilities.handle_exception(self, 'oubot_ignore:', s, config)
+            utilities.handle_exception(self, 'oubot_ignore:', s, config.log_chat)
             return
         elseif oubot.ignore[msg.from.id] > 4 then
             return
         end
     elseif not self.database.administration.groups[tostring(msg.chat.id)] then
-        bindings.oubotChat(self, { chat_id = msg.chat.id })
+        bindings.leaveChat(self, { chat_id = msg.chat.id })
         return
     end
     return true
