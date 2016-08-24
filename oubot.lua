@@ -14,6 +14,10 @@
     ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
     FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License
     for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 ]]--
 
 local drua = require('otouto.drua-tg')
@@ -84,7 +88,7 @@ function oubot:action(msg, config)
             return
         end
     elseif not self.database.administration.groups[tostring(msg.chat.id)] then
-        bindings.leaveChat(self, { chat_id = msg.chat.id })
+        bindings.leaveChat{ chat_id = msg.chat.id }
         return
     end
     return true

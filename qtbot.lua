@@ -12,6 +12,10 @@
     ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
     FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License
     for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 ]]--
 
 local utilities = require('otouto.utilities')
@@ -39,11 +43,8 @@ end
 function qtbot:cron(config)
     local now = os.date('%H')
     if self.database.last_cat ~= now then
-        if bindings.sendPhoto(self,
-            {
-                chat_id = '@qtchan',
-                caption = now == '00' and qtbot.get_fact() or nil
-            },
+        if bindings.sendPhoto(
+            { chat_id = '@qtchan', caption = now == '00' and qtbot.get_fact() or nil },
             { photo = qtbot.get_cat(config.thecatapi_key) }
         ) then
             self.database.last_cat = now

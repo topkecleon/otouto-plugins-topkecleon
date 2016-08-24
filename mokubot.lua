@@ -13,6 +13,10 @@
     ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
     FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License
     for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 ]]--
 
 local utilities = require('otouto.utilities')
@@ -33,7 +37,7 @@ function mokubot:action(msg, config)
         end
     end
     if #gdat == 0 then
-        utilities.send_message(self, msg.chat.id, 'There are currently no listed groups.')
+        utilities.send_message(msg.chat.id, 'There are currently no listed groups.')
         return
     end
     local input = utilities.input(msg.text)
@@ -46,7 +50,7 @@ function mokubot:action(msg, config)
         end
         if output ~= '' then
             output = '*Groups matching* _' .. utilities.md_escape(input) .. '_ *:*\n' .. output
-            utilities.send_message(self, msg.chat.id, output, true, nil, true)
+            utilities.send_message(msg.chat.id, output, true, nil, true)
             return
         end
     end
@@ -56,7 +60,7 @@ function mokubot:action(msg, config)
             output = output .. '• [' .. utilities.md_escape(group.name) .. '](' .. group.link .. ')\n'
         end
     end
-    utilities.send_message(self, msg.chat.id, output, true, nil, true)
+    utilities.send_message(msg.chat.id, output, true, nil, true)
 end
 
 return mokubot

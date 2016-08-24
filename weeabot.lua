@@ -13,6 +13,10 @@
     ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
     FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License
     for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program; if not, write to the Free Software Foundation,
+    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 ]]--
 
 local utilities = require('otouto.utilities')
@@ -52,13 +56,13 @@ function weeabot:action(msg, config)
                 else
                     name = utilities.build_name(msg.from.first_name, msg.from.last_name)
                 end
-                utilities.send_message(self, msg.chat.id, response:gsub('#NAME', name))
+                utilities.send_message(msg.chat.id, response:gsub('#NAME', name))
                 return
             end
         end
     end
     if msg.chat.id == -1001000134061 and math.random(200) == 1 then
-        utilities.send_message(self, msg.chat.id, weeabot.responses[math.random(#weeabot.responses)])
+        utilities.send_message(msg.chat.id, weeabot.responses[math.random(#weeabot.responses)])
     end
     return true
 end
