@@ -4,31 +4,19 @@
     oubot.
 
     Copyright 2016 topkecleon <drew@otou.to>
-
-    This program is free software; you can redistribute it and/or modify it
-    under the terms of the GNU Affero General Public License version 3 as
-    published by the Free Software Foundation.
-
-    This program is distributed in the hope that it will be useful, but WITHOUT
-    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License
-    for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program; if not, write to the Free Software Foundation,
-    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+    This code is licensed under the GNU AGPLv3. See /LICENSE for details.
 ]]--
 
 local utilities = require('otouto.utilities')
 
 local mokubot = {}
 
-function mokubot:init(config)
-    mokubot.triggers = utilities.triggers(self.info.username, config.cmd_pat):t('groups', true).table
+function mokubot:init()
+    mokubot.triggers = utilities.triggers(self.info.username, self.config.cmd_pat):t('groups', true).table
     mokubot.command = 'groups [query]'
 end
 
-function mokubot:action(msg, config)
+function mokubot:action(msg)
     local gdat = utilities.load_data('../group_data.json')
     local chat_id_str = tostring(msg.chat.id)
     for _, group in ipairs(gdat) do
@@ -59,6 +47,36 @@ function mokubot:action(msg, config)
         if not group.unlisted then
             output = output .. '• [' .. utilities.md_escape(group.name) .. '](' .. group.link .. ')\n'
         end
+    end
+    utilities.send_message(msg.chat.id, output, true, nil, true)
+end
+
+ -- Basically administration.lua's /groups.
+function mokubot:action(msg)
+    local groups = utilities.load_data('../group_data.json')
+    if groups[tostring(msg.chat.id)] then return end
+
+    local input = utilities.input(msg.text)
+    local group_list = {}
+    local result_list = {}
+    for _, group in pairs(groups) do
+        if (not group.flags[1]) and group.link then -- no unlisted or unlinked groups
+            local line = '• [' .. utilities.md_escape(group.name) .. '](' .. group.link .. ')'
+            table.insert(group_list, line)
+            if input and string.match(group.name:lower(), input:lower()) then
+                table.insert(result_list, line)
+            end
+        end
+    end
+    local output
+    if #result_list > 0 then
+        table.sort(result_list)
+        output = '*Groups matching* _' .. input:gsub('_', '_\\__') .. '_*:*\n' .. table.concat(result_list, '\n')
+    elseif #group_list > 0 then
+        table.sort(group_list)
+        output = '*Groups:*\n' .. table.concat(group_list, '\n')
+    else
+        output = 'There are currently no listed groups.'
     end
     utilities.send_message(msg.chat.id, output, true, nil, true)
 end

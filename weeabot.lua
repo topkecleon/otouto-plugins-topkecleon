@@ -4,19 +4,7 @@
     weebery in the OU Anime & Manga group, and responding to "tadaima".
 
     Copyright 2016 topkecleon <drew@otou.to>
-
-    This program is free software; you can redistribute it and/or modify it
-    under the terms of the GNU Affero General Public License version 3 as
-    published by the Free Software Foundation.
-
-    This program is distributed in the hope that it will be useful, but WITHOUT
-    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License
-    for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program; if not, write to the Free Software Foundation,
-    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+    This code is licensed under the GNU AGPLv3. See /LICENSE for details.
 ]]--
 
 local utilities = require('otouto.utilities')
@@ -45,17 +33,11 @@ local weeabot = {
     }
 }
 
-function weeabot:action(msg, config)
+function weeabot:action(msg)
     for response, triggers in pairs(weeabot.greetings) do
         for _, trigger in ipairs(triggers) do
             if msg.text_lower:match(trigger) then
-                local name
-                local userdata = self.database.userdata[tostring(msg.from.id)]
-                if userdata and userdata.nickname then
-                    name = userdata.nickname
-                else
-                    name = utilities.build_name(msg.from.first_name, msg.from.last_name)
-                end
+                local name = (self.database.userdata.nick and self.database.userdata.nick[tostring(msg.from.id)]) or utilities.build_name(msg.from.first_name, msg.from.last_name)
                 utilities.send_message(msg.chat.id, response:gsub('#NAME', name))
                 return
             end
