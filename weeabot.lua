@@ -38,12 +38,13 @@ function weeabot:action(msg)
         for _, trigger in ipairs(triggers) do
             if msg.text_lower:match(trigger) then
                 local name = (self.database.userdata.nick and self.database.userdata.nick[tostring(msg.from.id)]) or utilities.build_name(msg.from.first_name, msg.from.last_name)
+                name = name:gsub('%%', '%%%%')
                 utilities.send_message(msg.chat.id, response:gsub('#NAME', name))
                 return
             end
         end
     end
-    if msg.chat.id == -1001000134061 and math.random(200) == 1 then
+    if msg.chat.id == -1001000134061 and math.random(500) == 1 then
         utilities.send_message(msg.chat.id, weeabot.responses[math.random(#weeabot.responses)])
     end
     return true

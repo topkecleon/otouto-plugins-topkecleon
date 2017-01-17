@@ -57,6 +57,9 @@ function mokubot:action(msg)
     if groups[tostring(msg.chat.id)] then return end
 
     local input = utilities.input(msg.text)
+    if input and input:match('\n') then
+        input = input:match('(.-)\n')
+    end
     local group_list = {}
     local result_list = {}
     for _, group in pairs(groups) do

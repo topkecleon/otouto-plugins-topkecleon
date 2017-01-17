@@ -1,7 +1,7 @@
 --[[
     oubot.lua
-    otouto plugin for the uninteresting operation of oubot; ignoring spammers
-    and preparing a group list for mokubot.
+    otouto plugin for the uninteresting operation of oubot: ignoring spammers,
+    restarting all bots daily, and preparing a group list for mokubot.
 
     Copyright 2016 topkecleon <drew@otou.to>
     This code is licensed under the GNU AGPLv3. See /LICENSE for details.
@@ -23,6 +23,19 @@ function oubot:init()
 end
 
 function oubot:cron()
+    -- restart all bots and tg every day
+    -- this should probably just be local stuff in each individual bot /shrug
+    if oubot.last_restart ~= os.date('%d') then
+        drua.send('resolve_username mokubot', true)
+        drua.message(117099167, '/halt') -- mokubot
+        drua.send('resolve_username oubot', true)
+        drua.message(81189983, '/halt') -- oubot
+        drua.send('resolve_username otoutobot', true)
+        drua.message(162332077, '/halt') -- otoutobot
+        os.execute('sleep 1s')
+        drua.send('quit')
+        return
+    end
     -- update mokubot's grouplist every hour
     if oubot.last_grouplisting ~= os.date('%H') then
         utilities.save_data('../group_data.json', self.database.administration.groups)

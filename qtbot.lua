@@ -28,7 +28,7 @@ end
 
 function qtbot:cron()
     local now = os.date('%H')
-    if self.database.last_cat ~= now then
+    if now % 2 == 0 and self.database.last_cat ~= now then
         if bindings.sendPhoto{
             chat_id = '@qtchan',
             caption = now == '00' and qtbot.get_fact() or nil,
