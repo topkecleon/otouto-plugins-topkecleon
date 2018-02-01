@@ -2,7 +2,7 @@
     qtbot.lua
     otouto plugin for the operation of @qtchan.
 
-    Copyright 2016 topkecleon <drew@otou.to>
+    Copyright 2018 topkecleon <drew@otou.to>
     This code is licensed under the GNU AGPLv3. See /LICENSE for details.
 ]]--
 
@@ -19,19 +19,11 @@ function qtbot.get_cat(thecatapi_key)
     return image_url
 end
 
-function qtbot.get_fact()
-    local url = 'http://catfacts-api.appspot.com/api/facts'
-    local jstr = HTTP.request(url)
-    local data = JSON.decode(jstr)
-    return data.facts[1]
-end
-
 function qtbot:cron()
     local now = os.date('%H')
-    if now % 2 == 0 and self.database.last_cat ~= now then
+    if self.database.last_cat ~= now and now % 4 == 0 then
         if bindings.sendPhoto{
             chat_id = '@qtchan',
-            caption = now == '00' and qtbot.get_fact() or nil,
             photo = qtbot.get_cat(self.config.thecatapi_key)
         } then
             self.database.last_cat = now
