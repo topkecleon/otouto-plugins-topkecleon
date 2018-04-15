@@ -24,6 +24,7 @@ function P:action(msg)
 
     -- The rest is basically copy-pasted from listgroups.lua.
     local input = utilities.input_from_msg(msg)
+    input = input and input:lower()
 
     local results = {}
     local listed_groups = {}
